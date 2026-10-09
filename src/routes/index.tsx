@@ -8,16 +8,14 @@ import {
   GraduationCap,
   Award,
   Briefcase,
+  Boxes,
+  Map,
+  BarChart3,
+  HardHat,
   X,
   Menu,
 } from "lucide-react";
 import profile from "@/assets/profile.jpg";
-import bcdf from "@/assets/bcdf.jpg";
-import gpa from "@/assets/gpa.jpg";
-import fire from "@/assets/firesafety.jpg";
-import rcc from "@/assets/rcc.jpg";
-import excel from "@/assets/excel.jpg";
-import comms from "@/assets/comms.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,53 +44,39 @@ const nav = [
   ["Education", "education"],
   ["Skills", "skills"],
   ["Certificates", "certificates"],
+  ["Projects", "projects"],
   ["Experience", "experience"],
   ["Hire Me", "hire"],
 ];
 
-const skillCategories = {
-  Frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Tailwind CSS"],
-  Backend: ["Python", "Java", "Node.js"],
-  "Machine Learning & Data": [
-    "Pandas",
-    "NumPy",
-    "Scikit-learn",
-    "Machine Learning (Basics)",
-    "Data Preprocessing",
-    "Regression",
-    "Classification",
-  ],
-  "Programming & CS": ["C++", "SQL", "OOP", "DSA", "Problem Solving"],
-  Tools: ["Git", "GitHub", "Vercel", "Excel", "Canva"],
-  "Soft Skills": [
-    "Analytical Thinking",
-    "Problem Solving",
-    "Leadership",
-    "Teamwork",
-    "Time Management",
-  ],
-  Languages: ["English — Fluent", "Urdu — Native", "Balti — Expert"],
-} as const;
+const skillCategories = [
+  { title: "CAD & BIM modeling", icon: Boxes, skills: ["AutoCAD · submission & basic drawings", "Architectural layouts", "Autodesk Revit · 3D models", "Capstone & freelance models", "BIM concepts & fundamentals"] },
+  { title: "Engineering & analysis", icon: BarChart3, skills: ["IBM SPSS · quantitative analysis", "Standard deviation & variance", "ArcGIS / ArcMap · spatial processing"] },
+  { title: "Programming & geotechnical", icon: HardHat, skills: ["Python · civil engineering scripts", "Soil classification mini-apps", "Soil classification", "Geotechnical principles"] },
+  { title: "Construction management", icon: Briefcase, skills: ["Construction scheduling · Coursera certified", "Construction project management · Columbia specialization in progress", "Cost estimation", "Quantity takeoffs"] },
+  { title: "Productivity & languages", icon: Map, skills: ["Microsoft Excel · expert", "Microsoft Word · expert", "Microsoft PowerPoint · expert", "English · fluent", "Urdu · native", "Balti · expert"] },
+] as const;
 
-type Cert = { img?: string; title: string; by: string };
+type Project = { number: string; title: string; category: string; description: string; tools: string[]; img: string };
+
+const projects: Project[] = [
+  { number: "01", title: "BCDF Resource Center — Revit 3D Model", category: "BIM & Architectural Modeling", img: "/assets/revit-bcdf-model.jpg", description: "Prepared comprehensive architectural and structural 3D models in Autodesk Revit for the BCDF Resource Center first-floor construction project. Focused on spatial coordination, precise layouts, and functional flow.", tools: ["Autodesk Revit", "BIM", "AutoCAD"] },
+  { number: "02", title: "5-Marla Residential House Design", category: "CAD & Architectural Planning", img: "/assets/5-marla-house-plan.svg", description: "Designed 2D working floor plans, elevations, and detailed technical submission drawings adhering to local zoning regulations and structural design constraints.", tools: ["AutoCAD", "Drafting"] },
+  { number: "03", title: "Scan-to-BIM Attic & Truss Modeling", category: "Advanced BIM", img: "/assets/scan-to-bim-attic.svg", description: "Linked laser point cloud scan data into Autodesk Revit to reconstruct accurate 3D structural models of complex roof attics, rafters, and timber trusses.", tools: ["Revit", "Point Cloud", "Scan-to-BIM"] },
+  { number: "04", title: "Skardu District GIS Road Spatial Analysis", category: "GIS & Infrastructure", img: "/assets/skardu-gis-roads.svg", description: "Processed spatial road networks for District Skardu using ArcMap. Executed georeferencing, attribute table management, and calculated segment lengths.", tools: ["ArcMap", "GIS", "Python Scripts"] },
+];
+
+type Cert = { title: string; by: string; img: string };
+type Preview = { title: string; subtitle: string; img: string };
 
 const certs: Cert[] = [
-  {
-    img: bcdf,
-    title: "Community Service — BCDF",
-    by: "Baltistan Culture & Development Foundation",
-  },
-  { img: gpa, title: "Highest GPA Achievement", by: "GBSO — UET Taxila" },
-  { img: fire, title: "Level 3 Award in Fire Safety", by: "ICTQual / Neon Institute of Business" },
-  { img: rcc, title: "Fire Response of RCC", by: "CPD, UET Taxila" },
-  {
-    img: excel,
-    title: "Excel for Beginners: Introduction to Spreadsheets",
-    by: "Coursera Project Network",
-  },
-  { img: comms, title: "Verbal Communications & Presentation", by: "Starweaver · Coursera" },
-  { title: "BIM Fundamentals for Engineers", by: "L&T EduTech · Coursera" },
-  { title: "AutoCAD 2023 Masterclass", by: "Packt · Coursera" },
+  { title: "BIM Fundamentals for Engineers", by: "L&T EduTech · Coursera", img: "/assets/bim-fundamental.jpg" },
+  { title: "AutoCAD 2023 Masterclass", by: "Packt · Coursera", img: "/assets/autocad.jpg" },
+  { title: "Construction Scheduling", by: "Coursera", img: "/assets/construction-scheduling.jpg" },
+  { title: "Construction Project and Management", by: "Coursera · Columbia University", img: "/assets/construction-management.jpg" },
+  { title: "Fire Response of RCC", by: "UET Taxila · Seminar Certificate", img: "/assets/fire-response-rcc.jpg" },
+  { title: "Verbal Communications and Presentation Skills", by: "Coursera · Starweaver", img: "/assets/verbal-communication.jpg" },
+  { title: "ICTQual Level 3 Award in Fire Safety", by: "Neon Institute of Business and Technology", img: "/assets/ictqual-fire-safety.jpg" },
 ];
 
 function FiverrIcon() {
@@ -100,7 +84,7 @@ function FiverrIcon() {
 }
 
 function Index() {
-  const [open, setOpen] = useState<string | null>(null);
+  const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -130,6 +114,19 @@ function Index() {
   }, [menuOpen]);
 
   useEffect(() => {
+    if (!selectedPreview) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedPreview(null);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [selectedPreview]);
+
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && menuOpen) {
         setMenuOpen(false);
@@ -138,25 +135,6 @@ function Index() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
-
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-      const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
-          setOpen(null);
-        }
-      };
-      window.addEventListener("keydown", onKeyDown);
-      return () => {
-        document.body.style.overflow = "";
-        window.removeEventListener("keydown", onKeyDown);
-      };
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -347,73 +325,64 @@ function Index() {
 
       {/* Skills */}
       <Section id="skills" eyebrow="02 — Skills" title="Technical expertise" muted>
-        <div className="space-y-10">
-          {Object.entries(skillCategories).map(([category, skills]) => (
-            <div key={category} className="reveal">
-              <h3 className="mb-4 text-lg font-semibold text-foreground">{category}</h3>
-              <div className="flex flex-wrap gap-2">
-                {skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="inline-flex items-center rounded-full border bg-card px-3 py-1.5 text-sm text-muted-foreground transition hover:border-primary hover:text-foreground"
-                  >
-                    {skill}
-                  </span>
-                ))}
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {skillCategories.map(({ title, icon: Icon, skills }) => (
+            <article key={title} className="reveal rounded-xl border bg-card p-6 transition hover:-translate-y-1 hover:shadow-lg">
+              <div className="mb-5 grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary"><Icon size={21} /></div>
+              <h3 className="mb-4 text-xl">{title}</h3>
+              <ul className="space-y-3 text-sm text-muted-foreground">{skills.map((skill) => <li key={skill} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />{skill}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="projects" eyebrow="04 — Selected work" title="Engineering in practice">
+        <div className="grid gap-6 md:grid-cols-2">
+          {projects.map((project) => (
+            <article key={project.number} className="reveal group overflow-hidden rounded-xl border bg-card transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
+              <button type="button" onClick={() => setSelectedPreview({ title: project.title, subtitle: project.category, img: project.img })} aria-label={`Zoom project preview: ${project.title}`} className="relative block aspect-[16/9] w-full overflow-hidden bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary">
+                <img src={project.img} alt={`${project.title} project preview`} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                <span className="absolute bottom-4 right-4 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm">Click to zoom preview</span>
+              </button>
+              <div className="p-6 sm:p-7">
+                <div className="flex items-start gap-4"><span className="font-display text-3xl text-primary/35">{project.number}</span><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">{project.category}</p><h3 className="mt-2 text-2xl">{project.title}</h3></div></div>
+                <p className="mt-4 leading-relaxed text-muted-foreground">{project.description}</p>
+                <div className="mt-5 flex flex-wrap gap-2">{project.tools.map((tool) => <span key={tool} className="rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">{tool}</span>)}</div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </Section>
 
       {/* Certificates */}
       <Section id="certificates" eyebrow="03 — Certificates" title="Credentials & achievements">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {certs.map((c) => {
-            const src = c.img;
-            const body = (
-              <>
-                {src && (
-                  <img
-                    src={src}
-                    alt={c.title}
-                    loading="lazy"
-                    className="w-full transition duration-500 group-hover:scale-[1.03]"
-                  />
-                )}
-                <div className="p-4">
-                  <div className="flex items-center gap-2 font-semibold">
-                    <Award size={16} className="text-accent" /> {c.title}
-                  </div>
-                  <p className="mt-1 text-sm text-muted-foreground">{c.by}</p>
-                </div>
-              </>
-            );
-            const cls =
-              "reveal group mb-5 block w-full max-w-full overflow-hidden rounded-lg border bg-card text-left transition hover:-translate-y-1 hover:shadow-xl";
-            return src ? (
-              <button key={c.title} onClick={() => setOpen(src)} className={cls}>
-                {body}
-              </button>
-            ) : (
-              <div key={c.title} className={cls}>
-                {body}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {certs.map((c) => (
+            <button key={c.title} type="button" onClick={() => setSelectedPreview({ title: c.title, subtitle: c.by, img: c.img })} aria-label={`Preview certificate: ${c.title}`} className="reveal group overflow-hidden rounded-xl border bg-card text-left transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+              <div className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-muted">
+                <div className="flex flex-col items-center gap-3 text-primary/70"><Award size={36} strokeWidth={1.5} /><span className="text-xs font-semibold uppercase tracking-[0.18em]">Certificate</span></div>
+                <img src={c.img} alt={`${c.title} certificate`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-contain p-2 transition duration-500 group-hover:scale-[1.04]" />
+                <span className="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground shadow-sm">Click to preview</span>
               </div>
-            );
-          })}
+              <div className="min-h-28 p-5">
+                <h3 className="text-lg leading-snug">{c.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{c.by}</p>
+              </div>
+            </button>
+          ))}
         </div>
       </Section>
 
       {/* Experience */}
-      <Section id="experience" eyebrow="04 — Experience" title="Leadership & community" muted>
+      <Section id="experience" eyebrow="05 — Experience" title="Leadership & community" muted>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             [
               "Committee Head",
               "Team Research & Innovation, ASCE UET Taxila Chapter",
               [
-                "Leads research & innovation initiatives",
-                "Coordinates chapter technical activities",
+                "Coordinated technical activities during a two-month active tenure",
+                "Contributed to civil drawings and initial cost estimations",
               ],
             ],
             [
@@ -459,7 +428,7 @@ function Index() {
         <div className="mx-auto grid max-w-6xl gap-14 px-6 md:grid-cols-2">
           <div className="reveal">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-accent">
-              05 — Hire Me
+              06 — Contact
             </p>
             <h2 className="text-4xl md:text-5xl">Have a project in mind? Let's build it.</h2>
             <p className="mt-5 text-navy-muted">
@@ -559,21 +528,16 @@ function Index() {
         </p>
       </section>
 
-      {open && (
-        <div
-          onClick={() => setOpen(null)}
-          className="fixed inset-0 z-50 grid place-items-center bg-navy/90 p-6"
-        >
-          <button aria-label="Close" className="absolute right-6 top-6 text-navy-foreground">
-            <X />
-          </button>
-          <img
-            src={open}
-            alt="Certificate"
-            className="max-h-[90vh] max-w-full rounded-lg shadow-2xl"
-          />
+      {selectedPreview && (
+        <div role="dialog" aria-modal="true" aria-label={`${selectedPreview.title} image preview`} onClick={() => setSelectedPreview(null)} className="fixed inset-0 z-[60] grid place-items-center bg-navy/95 p-4 backdrop-blur-sm sm:p-8">
+          <button type="button" onClick={() => setSelectedPreview(null)} aria-label="Close image preview" className="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/20 sm:right-7 sm:top-7"><X size={22} /></button>
+          <div onClick={(event) => event.stopPropagation()} className="flex max-h-full w-full max-w-6xl flex-col items-center gap-4">
+            <img src={selectedPreview.img} alt={`${selectedPreview.title} preview`} className="max-h-[78vh] max-w-full rounded-lg object-contain shadow-2xl" />
+            <div className="text-center text-white"><h2 className="text-xl sm:text-2xl">{selectedPreview.title}</h2><p className="mt-1 text-sm text-white/70">{selectedPreview.subtitle}</p></div>
+          </div>
         </div>
       )}
+
     </div>
   );
 }

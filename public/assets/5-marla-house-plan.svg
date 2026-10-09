@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-label="Architectural floor plan drawing preview">
+  <rect width="1280" height="720" fill="#e9eef0"/>
+  <path d="M48 48h1184v624H48z" fill="#f8faf9" stroke="#1d3542" stroke-width="3"/>
+  <path d="M120 115h450v490H120zM570 115h590v260H570zM570 375h285v230H570zM855 375h305v230H855z" fill="none" stroke="#244657" stroke-width="12"/>
+  <path d="M345 115v490M120 355h450M720 115v260M570 245h590M710 375v230M855 495h305" fill="none" stroke="#547b8a" stroke-width="7"/>
+  <path d="M220 115v-35h95v35M410 605v35h95v-35M570 180h-35v45h35M1160 180h35v90h-35M660 375v-28h70v28M960 605v28h95v-28" fill="none" stroke="#c78544" stroke-width="5"/>
+  <g fill="#314d58" font-family="Arial,sans-serif" font-size="22"><text x="220" y="250">LIVING</text><text x="220" y="470">BEDROOM</text><text x="390" y="300">KITCHEN</text><text x="750" y="210">BEDROOM</text><text x="625" y="500">BATH</text><text x="930" y="500">BEDROOM</text></g>
+  <text x="80" y="695" fill="#49616a" font-family="Arial,sans-serif" font-size="16" letter-spacing="4">RESIDENTIAL FLOOR PLAN · DRAWING PREVIEW</text>
+</svg>
