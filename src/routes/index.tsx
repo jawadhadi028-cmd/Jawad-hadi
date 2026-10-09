@@ -42,11 +42,11 @@ const LINKEDIN = "https://www.linkedin.com/in/jawad-hadi-1a439240a";
 const FIVERR = "https://www.fiverr.com/pe/XLE9x4Z";
 const nav = [
   ["Home", "home"],
-  ["Education", "education"],
-  ["Skills", "skills"],
-  ["Certificates", "certificates"],
   ["Projects", "projects"],
   ["Experience", "experience"],
+  ["Skills", "skills"],
+  ["Education", "education"],
+  ["Certificates", "certificates"],
   ["Hire Me", "hire"],
 ];
 
@@ -93,11 +93,16 @@ function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
+    const revealElements = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      revealElements.forEach((el) => el.classList.add("in"));
+      return;
+    }
     const io = new IntersectionObserver(
       (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
-      { threshold: 0.12 },
+      { threshold: 0.01, rootMargin: "0px 0px 160px 0px" },
     );
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+    revealElements.forEach((el) => io.observe(el));
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => {
@@ -337,48 +342,7 @@ function Index() {
         </div>
       </section>
 
-      {/* Education */}
-      <Section id="education" eyebrow="01 — Education" title="Academic foundation">
-        <div className="relative ml-3 sm:ml-4 border-l border-border">
-          {[
-            [
-              "B.Sc. Civil Engineering",
-              "UET Taxila",
-              "Currently in 5th Semester · Highest GPA award (GBSO)",
-            ],
-            [
-              "FSc (Pre-Engineering)",
-              "Cadet College Skardu",
-              "Grade A- · Leadership, Courage, Communication",
-            ],
-            ["Matriculation", "Public School and College Skardu", "Grade A"],
-          ].map(([t, s, d]) => (
-            <div key={t} className="reveal relative mb-10 pl-8 sm:pl-10 last:mb-0">
-              <span className="absolute -left-[13px] top-1 grid h-6 w-6 place-items-center rounded-full bg-primary text-primary-foreground">
-                <GraduationCap size={13} />
-              </span>
-              <h3 className="text-xl sm:text-2xl">{t}</h3>
-              <p className="font-semibold text-primary">{s}</p>
-              <p className="mt-1 text-muted-foreground">{d}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Skills */}
-      <Section id="skills" eyebrow="02 — Skills" title="Technical expertise" muted>
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {skillCategories.map(({ title, icon: Icon, skills }) => (
-            <article key={title} className="reveal rounded-xl border bg-card p-6 transition hover:-translate-y-1 hover:shadow-lg">
-              <div className="mb-5 grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary"><Icon size={21} /></div>
-              <h3 className="mb-4 text-xl">{title}</h3>
-              <ul className="space-y-3 text-sm text-muted-foreground">{skills.map((skill) => <li key={skill} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />{skill}</li>)}</ul>
-            </article>
-          ))}
-        </div>
-      </Section>
-
-      <Section id="projects" eyebrow="04 — Selected work" title="Engineering in practice">
+      <Section id="projects" eyebrow="01 — Selected work" title="Engineering in practice">
         <div className="grid gap-6 md:grid-cols-2">
           {projects.map((project) => (
             <article key={project.number} className="reveal group overflow-hidden rounded-xl border bg-card transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl">
@@ -396,27 +360,8 @@ function Index() {
         </div>
       </Section>
 
-      {/* Certificates */}
-      <Section id="certificates" eyebrow="03 — Certificates" title="Credentials & achievements">
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {certs.map((c) => (
-            <button key={c.title} type="button" onClick={() => setSelectedPreview({ title: c.title, subtitle: c.by, img: c.img })} aria-label={`Preview certificate: ${c.title}`} className="reveal group overflow-hidden rounded-xl border bg-card text-left transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-              <div className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-muted">
-                <div className="flex flex-col items-center gap-3 text-primary/70"><Award size={36} strokeWidth={1.5} /><span className="text-xs font-semibold uppercase tracking-[0.18em]">Certificate</span></div>
-                <img src={c.img} alt={`${c.title} certificate`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-contain p-2 transition duration-500 group-hover:scale-[1.04]" />
-                <span className="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground shadow-sm">Click to preview</span>
-              </div>
-              <div className="min-h-28 p-5">
-                <h3 className="text-lg leading-snug">{c.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{c.by}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </Section>
-
       {/* Experience */}
-      <Section id="experience" eyebrow="05 — Experience" title="Leadership & community" muted>
+      <Section id="experience" eyebrow="02 — Experience" title="Leadership & community" muted>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
@@ -470,6 +415,66 @@ function Index() {
               </ul>
               </div>
             </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Skills */}
+      <Section id="skills" eyebrow="03 — Skills" title="Technical expertise" muted>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {skillCategories.map(({ title, icon: Icon, skills }) => (
+            <article key={title} className="reveal rounded-xl border bg-card p-6 transition hover:-translate-y-1 hover:shadow-lg">
+              <div className="mb-5 grid h-11 w-11 place-items-center rounded-lg bg-primary/10 text-primary"><Icon size={21} /></div>
+              <h3 className="mb-4 text-xl">{title}</h3>
+              <ul className="space-y-3 text-sm text-muted-foreground">{skills.map((skill) => <li key={skill} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />{skill}</li>)}</ul>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      {/* Education */}
+      <Section id="education" eyebrow="04 — Education" title="Academic foundation">
+        <div className="relative ml-3 sm:ml-4 border-l border-border">
+          {[
+            [
+              "B.Sc. Civil Engineering",
+              "UET Taxila",
+              "Currently in 5th Semester · Highest GPA award (GBSO)",
+            ],
+            [
+              "FSc (Pre-Engineering)",
+              "Cadet College Skardu",
+              "Grade A- · Leadership, Courage, Communication",
+            ],
+            ["Matriculation", "Public School and College Skardu", "Grade A"],
+          ].map(([t, s, d]) => (
+            <div key={t} className="reveal relative mb-10 pl-8 sm:pl-10 last:mb-0">
+              <span className="absolute -left-[13px] top-1 grid h-6 w-6 place-items-center rounded-full bg-primary text-primary-foreground">
+                <GraduationCap size={13} />
+              </span>
+              <h3 className="text-xl sm:text-2xl">{t}</h3>
+              <p className="font-semibold text-primary">{s}</p>
+              <p className="mt-1 text-muted-foreground">{d}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      {/* Certificates */}
+      <Section id="certificates" eyebrow="05 — Certificates" title="Credentials & achievements">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {certs.map((c) => (
+            <button key={c.title} type="button" onClick={() => setSelectedPreview({ title: c.title, subtitle: c.by, img: c.img })} aria-label={`Preview certificate: ${c.title}`} className="reveal group overflow-hidden rounded-xl border bg-card text-left transition duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+              <div className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-muted">
+                <div className="flex flex-col items-center gap-3 text-primary/70"><Award size={36} strokeWidth={1.5} /><span className="text-xs font-semibold uppercase tracking-[0.18em]">Certificate</span></div>
+                <img src={c.img} alt={`${c.title} certificate`} loading="lazy" onError={(event) => { event.currentTarget.style.display = "none"; }} className="absolute inset-0 h-full w-full object-contain p-2 transition duration-500 group-hover:scale-[1.04]" />
+                <span className="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground shadow-sm">Click to preview</span>
+              </div>
+              <div className="min-h-28 p-5">
+                <h3 className="text-lg leading-snug">{c.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{c.by}</p>
+              </div>
+            </button>
           ))}
         </div>
       </Section>
