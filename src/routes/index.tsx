@@ -12,6 +12,7 @@ import {
   Map,
   BarChart3,
   HardHat,
+  CheckCircle2,
   X,
   Menu,
 } from "lucide-react";
@@ -85,6 +86,9 @@ function FiverrIcon() {
 
 function Index() {
   const [selectedPreview, setSelectedPreview] = useState<Preview | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -127,6 +131,12 @@ function Index() {
   }, [selectedPreview]);
 
   useEffect(() => {
+    if (!showSuccess) return;
+    const timeout = window.setTimeout(() => setShowSuccess(false), 3000);
+    return () => window.clearTimeout(timeout);
+  }, [showSuccess]);
+
+  useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && menuOpen) {
         setMenuOpen(false);
@@ -138,11 +148,43 @@ function Index() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const send = (e: FormEvent<HTMLFormElement>) => {
+  const send = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const body = `${f.get("message")}\n\n— ${f.get("name")} (${f.get("email")})`;
-    window.location.href = `mailto:engrjawadhadi@gmail.com?subject=${encodeURIComponent(String(f.get("subject") || "Project inquiry"))}&body=${encodeURIComponent(body)}`;
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const accessKey = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY;
+    setSubmitError("");
+    setShowSuccess(false);
+    if (!accessKey) {
+      setSubmitError("The contact form is not configured yet. Please email me directly.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: accessKey,
+          name: formData.get("name"),
+          email: formData.get("email"),
+          phone: formData.get("phone"),
+          subject: formData.get("subject") || "Portfolio project inquiry",
+          message: formData.get("message"),
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Message could not be sent. Please try again.");
+      }
+      form.reset();
+      setShowSuccess(true);
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -377,47 +419,56 @@ function Index() {
       <Section id="experience" eyebrow="05 — Experience" title="Leadership & community" muted>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            [
-              "Committee Head",
-              "Team Research & Innovation, ASCE UET Taxila Chapter",
-              [
-                "Coordinated technical activities during a two-month active tenure",
-                "Contributed to civil drawings and initial cost estimations",
-              ],
-            ],
-            [
-              "GB Representative",
-              "Gilgit Baltistan Student Organization, Punjab",
-              ["Represents GB students in Punjab", "Advocacy and student welfare"],
-            ],
-            [
-              "Community Service",
-              "BCDF · Jul – Aug 2025",
-              [
-                "Supervised first-floor construction of BCDF Resource Center",
-                "Prepared architectural drawings in Revit",
-                "Managed office data in Word & Excel",
-                "Glacier Grafting project dialogue",
-              ],
-            ],
-          ].map(([t, s, pts]) => (
+            {
+              title: "Committee Head",
+              subtitle: "Team Research & Innovation, ASCE UET Taxila Chapter",
+              img: "/assets/asce-certificate.jpg",
+              points: ["Coordinated technical activities during a two-month active tenure", "Contributed to civil drawings and initial cost estimations"],
+            },
+            {
+              title: "GB Representative",
+              subtitle: "Gilgit Baltistan Student Organization, Punjab",
+              img: "/assets/gbso-certificate.jpg",
+              points: ["Represented GB students in Punjab", "Advocacy and student welfare"],
+            },
+            {
+              title: "Community Service",
+              subtitle: "BCDF · Jul – Aug 2025",
+              img: "/assets/bcdf-certificate.jpg",
+              points: ["Supervised first-floor construction of BCDF Resource Center", "Prepared architectural drawings in Revit", "Managed office data in Word & Excel", "Glacier Grafting project dialogue"],
+            },
+          ].map(({ title, subtitle, img, points }) => (
             <div
-              key={t as string}
-              className="reveal rounded-lg border bg-card p-6 sm:p-7 transition hover:border-primary hover:shadow-lg"
+              key={title}
+              role="button"
+              tabIndex={0}
+              onClick={() => setSelectedPreview({ title, subtitle, img })}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setSelectedPreview({ title, subtitle, img });
+                }
+              }}
+              aria-label={`View certificate for ${title}`}
+              className="reveal group cursor-zoom-in overflow-hidden rounded-xl border bg-card transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-              <span className="grid h-11 w-11 place-items-center rounded-md bg-primary text-primary-foreground">
-                <Briefcase size={20} />
-              </span>
-              <h3 className="mt-5 text-xl sm:text-2xl">{t as string}</h3>
-              <p className="mt-1 text-sm font-semibold text-primary">{s as string}</p>
-              <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
-                {(pts as string[]).map((p) => (
+              <div className="relative aspect-[16/10] overflow-hidden bg-muted">
+                <img src={img} alt={`${title} certificate`} loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.04]" />
+                <span className="absolute bottom-3 right-3 rounded-full bg-background/90 px-3 py-1.5 text-xs font-semibold text-foreground shadow-sm">Click to zoom preview</span>
+              </div>
+              <div className="p-6 sm:p-7">
+                <span className="grid h-11 w-11 place-items-center rounded-md bg-primary text-primary-foreground"><Briefcase size={20} /></span>
+                <h3 className="mt-5 text-xl sm:text-2xl">{title}</h3>
+                <p className="mt-1 text-sm font-semibold text-primary">{subtitle}</p>
+                <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+                {points.map((p) => (
                   <li key={p} className="flex gap-2">
                     <span className="mt-2 h-1 w-3 shrink-0 bg-accent" />
                     {p}
                   </li>
                 ))}
               </ul>
+              </div>
             </div>
           ))}
         </div>
@@ -493,6 +544,19 @@ function Index() {
                 />
               </div>
               <div>
+                <label htmlFor="phone" className="sr-only">
+                  Your phone number (optional)
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  placeholder="Your phone number (optional)"
+                  className="w-full rounded-md border bg-background px-4 py-3 outline-none focus:border-primary"
+                />
+              </div>
+              <div>
                 <label htmlFor="subject" className="sr-only">
                   Subject
                 </label>
@@ -518,8 +582,9 @@ function Index() {
                 />
               </div>
             </div>
-            <button className="w-full rounded-md bg-primary py-3 font-semibold text-primary-foreground transition hover:opacity-90">
-              Send Message
+            {submitError && <p role="alert" className="text-sm text-destructive">{submitError}</p>}
+            <button disabled={isSubmitting} className="w-full rounded-md bg-primary py-3 font-semibold text-primary-foreground transition hover:opacity-90 disabled:cursor-wait disabled:opacity-60">
+              {isSubmitting ? "Sending…" : "Send Message"}
             </button>
           </form>
         </div>
@@ -534,6 +599,16 @@ function Index() {
           <div onClick={(event) => event.stopPropagation()} className="flex max-h-full w-full max-w-6xl flex-col items-center gap-4">
             <img src={selectedPreview.img} alt={`${selectedPreview.title} preview`} className="max-h-[78vh] max-w-full rounded-lg object-contain shadow-2xl" />
             <div className="text-center text-white"><h2 className="text-xl sm:text-2xl">{selectedPreview.title}</h2><p className="mt-1 text-sm text-white/70">{selectedPreview.subtitle}</p></div>
+          </div>
+        </div>
+      )}
+
+      {showSuccess && (
+        <div role="status" aria-live="polite" className="fixed inset-0 z-[70] grid place-items-center bg-navy/65 p-5 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-sm rounded-2xl border bg-card p-8 text-center text-card-foreground shadow-2xl animate-in zoom-in-95 duration-200">
+            <span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-500/10 text-emerald-600"><CheckCircle2 size={32} /></span>
+            <h2 className="mt-5 text-2xl">Message sent</h2>
+            <p className="mt-2 text-sm text-muted-foreground">Thanks for reaching out. I’ll get back to you soon.</p>
           </div>
         </div>
       )}
