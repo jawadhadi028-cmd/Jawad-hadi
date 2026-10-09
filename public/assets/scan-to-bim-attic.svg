@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 720" role="img" aria-label="Roof truss and point cloud modeling preview">
-  <rect width="1280" height="720" fill="#172b39"/>
-  <path d="M120 590 640 135l520 455M205 590h870M305 590V430l335-295 335 295v160" fill="none" stroke="#83c5c9" stroke-width="9"/>
-  <path d="m240 485 800 0M305 430l535 160M975 430 440 590M405 340l470 250M875 340 405 590M505 252l270 338M775 252 505 590" fill="none" stroke="#c8995b" stroke-width="6"/>
-  <g fill="#f4ca7a" opacity=".85"><circle cx="350" cy="365" r="5"/><circle cx="410" cy="310" r="4"/><circle cx="480" cy="250" r="5"/><circle cx="570" cy="190" r="4"/><circle cx="700" cy="185" r="5"/><circle cx="810" cy="270" r="4"/><circle cx="900" cy="345" r="5"/><circle cx="980" cy="415" r="4"/><circle cx="260" cy="520" r="4"/><circle cx="1040" cy="535" r="5"/></g>
-  <text x="72" y="670" fill="#d9e5e6" font-family="Arial,sans-serif" font-size="18" letter-spacing="5">POINT CLOUD → SCAN-TO-BIM · ROOF STRUCTURE</text>
-</svg>

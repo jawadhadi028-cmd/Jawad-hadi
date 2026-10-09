@@ -62,9 +62,9 @@ type Project = { number: string; title: string; category: string; description: s
 
 const projects: Project[] = [
   { number: "01", title: "BCDF Resource Center — Revit 3D Model", category: "BIM & Architectural Modeling", img: "/assets/revit-bcdf-model.jpg", description: "Prepared comprehensive architectural and structural 3D models in Autodesk Revit for the BCDF Resource Center first-floor construction project. Focused on spatial coordination, precise layouts, and functional flow.", tools: ["Autodesk Revit", "BIM", "AutoCAD"] },
-  { number: "02", title: "5-Marla Residential House Design", category: "CAD & Architectural Planning", img: "/assets/5-marla-house-plan.svg", description: "Designed 2D working floor plans, elevations, and detailed technical submission drawings adhering to local zoning regulations and structural design constraints.", tools: ["AutoCAD", "Drafting"] },
-  { number: "03", title: "Scan-to-BIM Attic & Truss Modeling", category: "Advanced BIM", img: "/assets/scan-to-bim-attic.svg", description: "Linked laser point cloud scan data into Autodesk Revit to reconstruct accurate 3D structural models of complex roof attics, rafters, and timber trusses.", tools: ["Revit", "Point Cloud", "Scan-to-BIM"] },
-  { number: "04", title: "Skardu District GIS Road Spatial Analysis", category: "GIS & Infrastructure", img: "/assets/skardu-gis-roads.svg", description: "Processed spatial road networks for District Skardu using ArcMap. Executed georeferencing, attribute table management, and calculated segment lengths.", tools: ["ArcMap", "GIS", "Python Scripts"] },
+  { number: "02", title: "5-Marla Residential House Design", category: "CAD & Architectural Planning", img: "/assets/5-marla-house-plan.jpg", description: "Designed 2D working floor plans, elevations, and detailed technical submission drawings adhering to local zoning regulations and structural design constraints.", tools: ["AutoCAD", "Drafting"] },
+  { number: "03", title: "Scan-to-BIM Attic & Truss Modeling", category: "Advanced BIM", img: "/assets/scan-to-bim-attic.jpg", description: "Linked laser point cloud scan data into Autodesk Revit to reconstruct accurate 3D structural models of complex roof attics, rafters, and timber trusses.", tools: ["Revit", "Point Cloud", "Scan-to-BIM"] },
+  { number: "04", title: "Skardu District GIS Road Spatial Analysis", category: "GIS & Infrastructure", img: "/assets/skardu-gis-roads.jpg", description: "Processed spatial road networks for District Skardu using ArcMap. Executed georeferencing, attribute table management, and calculated segment lengths.", tools: ["ArcMap", "GIS", "Python Scripts"] },
 ];
 
 type Cert = { title: string; by: string; img: string };
@@ -298,7 +298,7 @@ function Index() {
                 Hire Me on Fiverr <ArrowRight size={18} />
               </a>
               <a
-                href="#certificates"
+                href="#projects"
                 className="inline-flex items-center justify-center rounded-md border border-navy-muted/40 px-6 py-3 font-semibold transition hover:border-navy-foreground w-full sm:w-auto"
               >
                 View Work
@@ -480,7 +480,7 @@ function Index() {
       </Section>
 
       {/* Hire */}
-      <section id="hire" className="blueprint bg-navy py-24 text-navy-foreground">
+      <section id="hire" className="blueprint bg-navy pb-8 pt-24 text-navy-foreground">
         <div className="mx-auto grid max-w-6xl gap-14 px-6 md:grid-cols-2">
           <div className="reveal">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-accent">
@@ -593,7 +593,7 @@ function Index() {
             </button>
           </form>
         </div>
-        <p className="mt-20 text-center text-xs text-navy-muted">
+        <p className="mt-12 text-center text-xs text-navy-muted">
           © {new Date().getFullYear()} Jawad Hadi · Civil Engineering, UET Taxila
         </p>
       </section>
